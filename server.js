@@ -38,6 +38,18 @@ const run = async () => {
       const tasks = await tasksCollection.find({}).toArray();
       res.send(tasks);
     });
+
+    //  adding tasks
+    app.post('/tasks', async (req, res) => {
+      const completeTask = {
+        $set: { isCompleted: false },
+      };
+      const taskAdding = await tasksCollection.insertOne(
+        req.body,
+        completeTask
+      );
+      res.send(taskAdding);
+    });
   } finally {
     // await client.close();
   }
