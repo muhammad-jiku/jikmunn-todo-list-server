@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const port = process.env.PORT || 5000;
 const app = express();
@@ -41,14 +41,40 @@ const run = async () => {
 
     //  adding tasks
     app.post('/tasks', async (req, res) => {
-      const completeTask = {
+      const taskAdding = await tasksCollection.insertOne(req.body);
+      res.send(taskAdding);
+    });
+
+    // update taskDetails by completing tasks
+    app.put('/tasks/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const tasksUpdate = {
+        $set: { isCompleted: true },
+      };
+      const tasksUpdateResult = await tasksCollection.updateOne(
+        filter,
+        tasksUpdate,
+        options
+      );
+      res.send(tasksUpdateResult);
+    });
+
+    // update taskDetails by not completing tasks
+    app.put('/task/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const tasksUpdate = {
         $set: { isCompleted: false },
       };
-      const taskAdding = await tasksCollection.insertOne(
-        req.body,
-        completeTask
+      const tasksUpdateResult = await tasksCollection.updateOne(
+        filter,
+        tasksUpdate,
+        options
       );
-      res.send(taskAdding);
+      res.send(tasksUpdateResult);
     });
   } finally {
     // await client.close();
