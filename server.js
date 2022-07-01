@@ -35,8 +35,18 @@ const run = async () => {
 
     // displaying  tasks
     app.get('/tasks', async (req, res) => {
-      const tasks = await tasksCollection.find({}).toArray();
+      const tasks = await tasksCollection
+        .find({ isCompleted: false })
+        .toArray();
       res.send(tasks);
+    });
+
+    // displaying completed tasks
+    app.get('/completedTasks', async (req, res) => {
+      const completedTasks = await tasksCollection
+        .find({ isCompleted: true })
+        .toArray();
+      res.send(completedTasks);
     });
 
     //  adding tasks
@@ -62,7 +72,7 @@ const run = async () => {
     });
 
     // update taskDetails by not completing tasks
-    app.put('/task/:id', async (req, res) => {
+    app.put('/completedTasks/:id', async (req, res) => {
       const id = req.params.id;
       const filter = { _id: ObjectId(id) };
       const options = { upsert: true };
