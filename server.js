@@ -58,10 +58,15 @@ const run = async () => {
     // update taskDetails by completing tasks
     app.put('/tasks/:id', async (req, res) => {
       const id = req.params.id;
+      const updateTaskList = req.body;
       const filter = { _id: ObjectId(id) };
       const options = { upsert: true };
       const tasksUpdate = {
-        $set: { isCompleted: true },
+        $set: {
+          taskName: updateTaskList?.taskName,
+          taskDate: updateTaskList?.taskDate,
+          isCompleted: true,
+        },
       };
       const tasksUpdateResult = await tasksCollection.updateOne(
         filter,
@@ -74,10 +79,15 @@ const run = async () => {
     // update taskDetails by not completing tasks
     app.put('/completedTasks/:id', async (req, res) => {
       const id = req.params.id;
+      const updateTaskList = req.body;
       const filter = { _id: ObjectId(id) };
       const options = { upsert: true };
       const tasksUpdate = {
-        $set: { isCompleted: false },
+        $set: {
+          taskName: updateTaskList?.taskName,
+          taskDate: updateTaskList?.taskDate,
+          isCompleted: false,
+        },
       };
       const tasksUpdateResult = await tasksCollection.updateOne(
         filter,
