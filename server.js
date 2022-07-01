@@ -54,10 +54,12 @@ const run = async () => {
       const date = req.query.date;
       console.log(date);
       const tasks = await tasksCollection
-        .find({ isCompleted: false }, { taskDate: date })
+        .find({
+          $and: [{ isCompleted: { $eq: false } }, { taskDate: { $eq: date } }],
+        })
         .toArray();
       // console.log(res);
-      // console.log(tasks);
+      console.log(tasks);
       res.send(tasks);
     });
 
@@ -65,10 +67,12 @@ const run = async () => {
     app.get('/completedTasks/lists', async (req, res) => {
       const date = req.query.date;
       const completedTasks = await tasksCollection
-        .find({ isCompleted: true }, { taskDate: date })
+        .find({
+          $and: [{ isCompleted: { $eq: true } }, { taskDate: { $eq: date } }],
+        })
         .toArray();
       console.log(res);
-      console.log(completedTasks);
+      // console.log(completedTasks);
       res.send(completedTasks);
     });
 
