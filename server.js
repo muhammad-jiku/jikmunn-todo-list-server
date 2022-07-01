@@ -86,6 +86,13 @@ const run = async () => {
       );
       res.send(tasksUpdateResult);
     });
+
+    // delete task by id
+    app.delete('/tasks/:id', async (req, res) => {
+      const id = req.params.id;
+      const result = await tasksCollection.deleteOne({ _id: ObjectId(id) });
+      res.send(result);
+    });
   } finally {
     // await client.close();
   }
