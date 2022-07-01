@@ -49,6 +49,29 @@ const run = async () => {
       res.send(completedTasks);
     });
 
+    // displaying todo tasks based on date
+    app.get('/tasks/lists', async (req, res) => {
+      const date = req.query.date;
+      console.log(date);
+      const tasks = await tasksCollection
+        .find({ isCompleted: false }, { taskDate: date })
+        .toArray();
+      // console.log(res);
+      // console.log(tasks);
+      res.send(tasks);
+    });
+
+    // displaying completed tasks
+    app.get('/completedTasks/lists', async (req, res) => {
+      const date = req.query.date;
+      const completedTasks = await tasksCollection
+        .find({ isCompleted: true }, { taskDate: date })
+        .toArray();
+      console.log(res);
+      console.log(completedTasks);
+      res.send(completedTasks);
+    });
+
     //  adding tasks
     app.post('/tasks', async (req, res) => {
       const taskAdding = await tasksCollection.insertOne(req.body);
