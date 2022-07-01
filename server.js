@@ -97,6 +97,48 @@ const run = async () => {
       res.send(tasksUpdateResult);
     });
 
+    // update taskDetails by completing tasks
+    app.patch('/tasks/:id', async (req, res) => {
+      const id = req.params.id;
+      // const updateTaskList = req.body;
+      const filter = { _id: ObjectId(id) };
+      // const options = { upsert: true };
+      const tasksUpdate = {
+        $set: {
+          // taskName: updateTaskList?.taskName,
+          // taskDate: updateTaskList?.taskDate,
+          isCompleted: true,
+        },
+      };
+      const tasksUpdateResult = await tasksCollection.updateOne(
+        filter,
+        tasksUpdate
+        // options
+      );
+      res.send(tasksUpdateResult);
+    });
+
+    // update taskDetails by not completing tasks
+    app.patch('/completedTasks/:id', async (req, res) => {
+      const id = req.params.id;
+      // const updateTaskList = req.body;
+      const filter = { _id: ObjectId(id) };
+      // const options = { upsert: true };
+      const tasksUpdate = {
+        $set: {
+          // taskName: updateTaskList?.taskName,
+          // taskDate: updateTaskList?.taskDate,
+          isCompleted: false,
+        },
+      };
+      const tasksUpdateResult = await tasksCollection.updateOne(
+        filter,
+        tasksUpdate
+        // options
+      );
+      res.send(tasksUpdateResult);
+    });
+
     // delete task by id
     app.delete('/tasks/:id', async (req, res) => {
       const id = req.params.id;
