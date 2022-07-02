@@ -73,7 +73,7 @@ const run = async () => {
         .toArray();
       console.log(res);
       // console.log(completedTasks);
-      // res.send(completedTasks);
+      res.send(completedTasks);
     });
 
     //  adding tasks
