@@ -108,6 +108,7 @@ const run = async () => {
         $set: {
           taskName: updateTaskList?.taskName,
           taskDate: updateTaskList?.taskDate,
+          user: updateTaskList?.user,
           isCompleted: true,
         },
       };
@@ -129,6 +130,7 @@ const run = async () => {
         $set: {
           taskName: updateTaskList?.taskName,
           taskDate: updateTaskList?.taskDate,
+          user: updateTaskList?.user,
           isCompleted: false,
         },
       };
