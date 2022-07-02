@@ -35,16 +35,22 @@ const run = async () => {
 
     // displaying  tasks
     app.get('/tasks', async (req, res) => {
+      const email = req.query.user;
       const tasks = await tasksCollection
-        .find({ isCompleted: false })
+        .find({
+          $and: [{ isCompleted: { $eq: false } }, { user: { $eq: email } }],
+        })
         .toArray();
       res.send(tasks);
     });
 
     // displaying completed tasks
     app.get('/completedTasks', async (req, res) => {
+      const email = req.query.user;
       const completedTasks = await tasksCollection
-        .find({ isCompleted: true })
+        .find({
+          $and: [{ isCompleted: { $eq: true } }, { user: { $eq: email } }],
+        })
         .toArray();
       res.send(completedTasks);
     });
@@ -52,10 +58,15 @@ const run = async () => {
     // displaying todo tasks based on date
     app.get('/tasks/lists', async (req, res) => {
       const date = req.query.date;
+      const email = req.query.user;
       console.log(date);
       const tasks = await tasksCollection
         .find({
-          $and: [{ isCompleted: { $eq: false } }, { taskDate: { $eq: date } }],
+          $and: [
+            { isCompleted: { $eq: false } },
+            { taskDate: { $eq: date } },
+            { user: { $eq: email } },
+          ],
         })
         .toArray();
       // console.log(res);
@@ -66,9 +77,14 @@ const run = async () => {
     // displaying completed tasks
     app.get('/completedTasks/lists', async (req, res) => {
       const date = req.query.date;
+      const email = req.query.user;
       const completedTasks = await tasksCollection
         .find({
-          $and: [{ isCompleted: { $eq: true } }, { taskDate: { $eq: date } }],
+          $and: [
+            { isCompleted: { $eq: true } },
+            { taskDate: { $eq: date } },
+            { user: { $eq: email } },
+          ],
         })
         .toArray();
       console.log(res);
